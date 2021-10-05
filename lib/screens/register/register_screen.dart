@@ -26,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
       body: BlocProvider<RegisterBloc>(
-        create: (context) => RegisterBloc(userRepository: _userRepository),
+        create: (context) => RegisterBloc(_userRepository),
         child: Container(
           height: double.infinity,
           decoration: BoxDecoration(

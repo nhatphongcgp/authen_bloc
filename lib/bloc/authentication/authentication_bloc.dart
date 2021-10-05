@@ -1,27 +1,14 @@
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../repositories/user_repository.dart';
-
+import 'package:firebase_auth_bloc/repositories/user_repository.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository _userRepository;
-
-  //Dalam Dart, colon atau ':' merupakan operator yang spesial
-  //fungsinya adalah inisialisasi fields dalam kelas kita dengan input dari constructor
-  //dalam hal ini, nilai _userRepository kelas di inisialisasi dengan userRepository yang merupakan input constructor dari kelas
-  //colon ':' di constructor ini dinamakana 'Initializer list', dimana akan di run lebih dibanding superclass constructor dan main class constructor, urutannya:
-  //1. Initializer list
-  //2. super class constructor (super(AuthenticationInitial()))
-  //3. main class constructor
-  AuthenticationBloc({UserRepository userRepository})
-      : _userRepository = userRepository,
-        super(AuthenticationInitial());
-
+  final UserRepository userRepository;
+  AuthenticationBloc(this.userRepository) : super(AuthenticationInitial());
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
@@ -38,26 +25,20 @@ class AuthenticationBloc
   //AuthenticationLoggetOut
   Stream<AuthenticationState> _mapAuthenticationLoggedOutToState() async* {
     yield AuthenticationFailure();
-    _userRepository.signOut();
+    userRepository.signOut();
   }
 
-  //AuthenticationLoggedIn
+// //AuthenticationLoggedIn
   Stream<AuthenticationState> _mapAuthenticationLoggedInToState() async* {
-    yield AuthenticationSuccess(await _userRepository.getUser());
-    //yield AuthenticationSuccess(_userRepository.getUser());
+    yield AuthenticationSuccess(userRepository.currentUser);
   }
 
-  //AuthenticationStarted :
-  //1. periksa apakah session Login masih ada (isSignedIn)
-  //2. Jika masih Sign In maka ambil current user dan kembalikan state AuthenticationSuccess, di main.dart akan tampilkan HomeScreen
-  //3. Selain itu, kembalikan state Failure, dimana ditangkap main.dart akan tampilkan LoginScreen
+  // //AuthenticationStarted
   Stream<AuthenticationState> _mapAuthenticationStartedToState() async* {
-    final isSignedIn = await _userRepository.isSignedIn();
-    //final isSignedIn = _userRepository.isSignedIn();
+    final isSignedIn = await userRepository.isSignedIn();
     if (isSignedIn) {
-      final firebaseuser = await _userRepository.getUser();
-      //final firebaseuser = _userRepository.getUser();
-      yield AuthenticationSuccess(firebaseuser);
+      final firebaseUser = userRepository.currentUser;
+      yield AuthenticationSuccess(firebaseUser);
     } else {
       yield AuthenticationFailure();
     }

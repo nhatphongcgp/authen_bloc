@@ -13,7 +13,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;
 
-  LoginBloc({UserRepository userRepository})
+  LoginBloc(UserRepository userRepository)
       : _userRepository = userRepository,
         super(LoginState.initial());
 
@@ -22,10 +22,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEvent event,
   ) async* {
     if (event is LoginEmailChanged) {
-      yield* _mapLoginEmailChangeToState(event.email);
+      yield* _mapLoginEmailChangedToState(event.email);
     } else if (event is LoginPasswordChanged) {
-      yield* _mapLoginPasswordChangeToState(event.password);
-    } else if (event is LoginWithCredentialsPressed) {
+      yield* _mapLoginPasswordChangedToState(event.password);
+    } else if (event is LoginWithEmailAndPassword) {
       yield* _mapLoginWithCredentialChangeToState(
           email: event.email, password: event.password);
     } else if (event is LoginWithGoogle) {
@@ -33,11 +33,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapLoginEmailChangeToState(String email) async* {
+  Stream<LoginState> _mapLoginEmailChangedToState(String email) async* {
     yield state.update(isEmailValid: Validators.isValidEmail(email));
   }
 
-  Stream<LoginState> _mapLoginPasswordChangeToState(String password) async* {
+  Stream<LoginState> _mapLoginPasswordChangedToState(String password) async* {
     yield state.update(isPasswordValid: Validators.isValidPassword(password));
   }
 
@@ -45,7 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       {String email, String password}) async* {
     yield LoginState.loading();
     try {
-      await _userRepository.signInWithCredential(email, password);
+      await _userRepository.signInwithEmailAndPassword(email, password);
       yield LoginState.success();
     } on FirebaseAuthException catch (e) {
       yield LoginState.failure(e.message);

@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(userRepository: _userRepository),
+        create: (context) => LoginBloc(_userRepository),
         child: Container(
           height: double.infinity,
           decoration: BoxDecoration(

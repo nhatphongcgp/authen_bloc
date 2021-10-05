@@ -19,7 +19,7 @@ void main() async {
   //Ketika program RUN langsung eksekusi event AuthenticationStarted()
   runApp(
     BlocProvider<AuthenticationBloc>(
-      create: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository)
         ..add(AuthenticationStarted()),
       child: MyApp(
         userRepository: userRepository,
