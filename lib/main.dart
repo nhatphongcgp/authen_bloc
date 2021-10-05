@@ -40,8 +40,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Color(0xff6a515e),
-        cursorColor: Color(0xff6a515e),
+        primaryColor: Color(0xff6a515e), textSelectionTheme: TextSelectionThemeData(cursorColor: Color(0xff6a515e)),
         /* primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity, 
         */

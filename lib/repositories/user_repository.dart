@@ -96,6 +96,6 @@ class UserRepository {
   }
 
   void updateDisplayName(displayName) {
-    _firebaseAuth.currentUser.updateProfile(displayName: displayName);
+    _firebaseAuth.currentUser.updateDisplayName(displayName);
   }
 }

@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSubmitting) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -213,12 +213,14 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 Widget _signInGoogleButton(Function submitFunction) {
-  return OutlineButton(
-    splashColor: Colors.grey,
-    onPressed: submitFunction,
+  return OutlinedButton(
+    style: OutlinedButton.styleFrom(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-    highlightElevation: 0,
-    borderSide: BorderSide(color: Colors.grey),
+    elevation: 0,
+    side: BorderSide(color: Colors.grey),
+    primary: Colors.grey,
+    ),
+    onPressed: submitFunction,
     child: Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Row(
